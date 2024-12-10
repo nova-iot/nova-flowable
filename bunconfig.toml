@@ -1,0 +1,3 @@
+[install]
+# 添加淘宝源（注意旧的淘宝源http://registry.npm.taobao.org已不再更新）
+registry = "https://registry.npmmirror.com"
