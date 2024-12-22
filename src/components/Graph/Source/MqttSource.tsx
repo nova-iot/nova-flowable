@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import {
   Position,
   Handle,
@@ -29,7 +29,6 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -79,13 +78,20 @@ function MqttSource({ id, data }: NodeProps<Node<{ [x: string]: string }>>) {
     });
     return () => subscription.unsubscribe(); // 清理订阅
   }, [form, id, updateNodeData]);
-  // 提交表单
+
+  const [openPopover, setOpenPopover] = useState(false);
+
+  const buttonHandle = () => {
+    setOpenPopover((prev) => !prev);
+  };
 
   return (
     <div className="border rounded border-gray-400 overflow-hidden">
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="rounded-none">MQTT</Button>
+          <Button className="rounded-none" onClick={buttonHandle}>
+            MQTT
+          </Button>
         </PopoverTrigger>
         <PopoverContent className="w-100 max-w-md overflow-hidden">
           <div className="space-y-1">
