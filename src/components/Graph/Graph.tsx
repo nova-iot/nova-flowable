@@ -14,29 +14,14 @@ import '@xyflow/react/dist/style.css';
 import { SidebarProvider, SidebarTrigger } from '../ui/sidebar';
 import { GraphSidebar } from './GraphSider';
 import MqttSource from './Source/MqttSource';
+import {nanoid} from "nanoid";
  
-const initialNodes = [
-  {
-    id: '1',
-    data: { label: 'Hello' },
-    position: { x: 0, y: 0 },
-    type: 'input',
-  },
-  {
-    id: '2',
-    data: { label: 'World' },
-    position: { x: 100, y: 100 },
-  },
-];
+const initialNodes: any[] = [];
  
-const initialEdges = [
-  { id: '1-2', source: '1', target: '2', label: 'to the', type: 'step' },
-];
+const initialEdges: any[] = [];
  
 // 创建一个包装组件来处理 ReactFlow 的内部逻辑
 function Flow() {
-  let id = 0;
-  const getId = () => `dndnode_${id++}`;
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -70,7 +55,7 @@ function Flow() {
         y: event.clientY,
       });
       const newNode = {
-        id: getId(),
+        id: nanoid(),
         type,
         position,
         data: { label: `${type} node` },
