@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from "react";
 import {
   ReactFlow,
   Controls,
@@ -8,18 +8,18 @@ import {
   useReactFlow,
   addEdge,
   ReactFlowProvider,
-} from '@xyflow/react';
-import { DnDProvider, useDnD } from '@/components/Graph/DnDContext';
-import '@xyflow/react/dist/style.css';
-import { SidebarProvider, SidebarTrigger } from '../ui/sidebar';
-import { GraphSidebar } from './GraphSider';
-import MqttSource from './Source/MqttSource';
-import {nanoid} from "nanoid";
- 
+} from "@xyflow/react";
+import { DnDProvider, useDnD } from "@/components/Graph/DnDContext";
+import "@xyflow/react/dist/style.css";
+import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
+import { GraphSidebar } from "./GraphSider";
+import MqttSource from "./Source/MqttSource";
+import { nanoid } from "nanoid";
+
 const initialNodes: any[] = [];
- 
+
 const initialEdges: any[] = [];
- 
+
 // 创建一个包装组件来处理 ReactFlow 的内部逻辑
 function Flow() {
   const reactFlowWrapper = useRef(null);
@@ -34,16 +34,22 @@ function Flow() {
 
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
-    [],
+    []
   );
 
-  const onDragOver = useCallback((event: { preventDefault: () => void; dataTransfer: { dropEffect: string; }; }) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-  }, []);
+  const onDragOver = useCallback(
+    (event: {
+      preventDefault: () => void;
+      dataTransfer: { dropEffect: string };
+    }) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+    },
+    []
+  );
 
   const onDrop = useCallback(
-    (event: { preventDefault: () => void; clientX: any; clientY: any; }) => {
+    (event: { preventDefault: () => void; clientX: any; clientY: any }) => {
       event.preventDefault();
       // check if the dropped element is valid
       if (!type) {
@@ -63,11 +69,18 @@ function Flow() {
 
       setNodes((nds) => [...nds, newNode]);
     },
-    [screenToFlowPosition, type],
+    [screenToFlowPosition, type]
   );
+  const [zoomOnScroll, setZoomOnScroll] = useState(true);
+
+  // 鼠标进入节点时禁用 zoomOnScroll
+  const handleNodeMouseEnter = () => setZoomOnScroll(false);
+
+  // 鼠标离开节点时恢复 zoomOnScroll
+  const handleNodeMouseLeave = () => setZoomOnScroll(true);
 
   return (
-    <div className='h-[100%] pb-10' ref={reactFlowWrapper}>
+    <div className="h-[100%] pb-10" ref={reactFlowWrapper}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -77,6 +90,9 @@ function Flow() {
         onDrop={onDrop}
         onDragOver={onDragOver}
         nodeTypes={nodeTypes}
+        zoomOnScroll={zoomOnScroll}
+        onNodeMouseEnter={handleNodeMouseEnter}
+        onNodeMouseLeave={handleNodeMouseLeave}
         fitView
       >
         <Background />

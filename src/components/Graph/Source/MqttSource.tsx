@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect } from "react";
 import {
   Position,
   Handle,
@@ -19,11 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import { Switch } from "@/components/ui/switch";
 import {
   Select,
@@ -32,6 +28,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Check, Settings } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 function MqttSource({ id, data }: NodeProps<Node<{ [x: string]: string }>>) {
   const { updateNodeData } = useReactFlow();
@@ -79,287 +99,306 @@ function MqttSource({ id, data }: NodeProps<Node<{ [x: string]: string }>>) {
     return () => subscription.unsubscribe(); // 清理订阅
   }, [form, id, updateNodeData]);
 
-  const [openPopover, setOpenPopover] = useState(false);
-
-  const buttonHandle = () => {
-    setOpenPopover((prev) => !prev);
-  };
-
   return (
-    <div className="border rounded border-gray-400 overflow-hidden">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button className="rounded-none" onClick={buttonHandle}>
-            MQTT
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-100 max-w-md overflow-hidden">
-          <div className="space-y-1">
-            <span className="text-sm text-muted-foreground">
-              eKuiper 为 MQTT 源流提供了内置支持，流可以订阅来自 MQTT
-              代理的消息并输入 eKuiper 处理管道。
-            </span>
-          </div>
-          <div className="overflow-y-auto max-h-96">
-            <Form {...form}>
-              <form
-                // onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-1 p-1"
-              >
-                <FormField
-                  control={form.control}
-                  name="server"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>服务器地址</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="topic"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>主题</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="clientId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>客户端ID</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="protocolVersion"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>协议版本</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="qos"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>服务质量</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>用户名</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>连接密码</FormLabel>
-                      <FormControl>
-                        <Input type="password" {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="certificationPath"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>证书路径</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="privateKeyPath"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>私钥路径</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="rootCaPath"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>根证书路径</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="certficationRaw"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>base64编码过的证书(优先)</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="privateKeyRaw"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>base64编码过的密钥原文(优先)</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="rootCARaw"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>base64编码过的根证书原文(优先)</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="insecureSkipVerify"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>TLS验证</FormLabel>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="retained"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>保留最后一条消息和其Qos</FormLabel>
-                      {/* <FormDescription>
+    <Card className="w-80">
+      <CardHeader>
+        <CardTitle>MQTT</CardTitle>
+        <CardDescription>
+          eKuiper 为 MQTT 源流提供了内置支持，流可以订阅来自
+          MQTT代理的消息并输入 eKuiper 处理管道。
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="absolute top-4 right-4">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Settings />
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[40vw] md:max-w-[40vw]">
+              <DialogHeader>
+                <DialogTitle>编辑MQTT配置</DialogTitle>
+                <DialogDescription>
+                  eKuiper 为 MQTT 源流提供了内置支持，流可以订阅来自
+                  MQTT代理的消息并输入 eKuiper 处理管道。
+                </DialogDescription>
+              </DialogHeader>
+              <div className="overflow-y-auto max-h-96">
+                <Form {...form}>
+                  <form className="space-y-1">
+                    <FormField
+                      control={form.control}
+                      name="server"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>服务器地址</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="topic"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>主题</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="clientId"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>客户端ID</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="protocolVersion"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>协议版本</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="qos"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>服务质量</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="username"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>用户名</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>连接密码</FormLabel>
+                          <FormControl>
+                            <Input type="password" {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="certificationPath"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>证书路径</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="privateKeyPath"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>私钥路径</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="rootCaPath"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>根证书路径</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="certficationRaw"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>base64编码过的证书(优先)</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="privateKeyRaw"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>base64编码过的密钥原文(优先)</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="rootCARaw"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>base64编码过的根证书原文(优先)</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="insecureSkipVerify"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>TLS验证</FormLabel>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="retained"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>保留最后一条消息和其Qos</FormLabel>
+                          {/* <FormDescription>
                                       Receive emails about your account security.
                                     </FormDescription> */}
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="compression"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        压缩方法(选择指定的压缩方法压缩Payload)
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="zlib">zlib压缩</SelectItem>
-                            <SelectItem value="gzip">gzip压缩</SelectItem>
-                            <SelectItem value="flate">flate压缩</SelectItem>
-                            <SelectItem value="zstd">zstd压缩</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="connectionSelector"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>根证书路径</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage className="text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                {/* <Button type="submit">Submit</Button> */}
-              </form>
-            </Form>
-          </div>
-          {/* </div> */}
-        </PopoverContent>
-      </Popover>
-      <Handle type="source" position={Position.Right} />
-    </div>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="compression"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            压缩方法(选择指定的压缩方法压缩Payload)
+                          </FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="zlib">zlib压缩</SelectItem>
+                                <SelectItem value="gzip">gzip压缩</SelectItem>
+                                <SelectItem value="flate">flate压缩</SelectItem>
+                                <SelectItem value="zstd">zstd压缩</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="connectionSelector"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>根证书路径</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                  </form>
+                </Form>
+              </div>
+              <DialogFooter>
+                <Button className="w-full" type="submit">
+                  检查并保存
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </CardContent>
+      {/* <CardFooter>
+        <Button className="w-full">
+          <Check /> 检查并保存
+        </Button>
+      </CardFooter> */}
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <Handle type="source" position={Position.Right} />
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem>Profile</ContextMenuItem>
+          <ContextMenuItem>Billing</ContextMenuItem>
+          <ContextMenuItem>Team</ContextMenuItem>
+          <ContextMenuItem>Subscription</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    </Card>
   );
 }
 
