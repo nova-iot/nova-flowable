@@ -13,8 +13,10 @@ import { DnDProvider, useDnD } from "@/components/Graph/DnDContext";
 import "@xyflow/react/dist/style.css";
 import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import { GraphSidebar } from "./GraphSider";
-import MqttSource from "./Source/MqttSource";
+import MqttSource from "./Source/Mqtt";
 import { nanoid } from "nanoid";
+import Neuron from "./Source/Neuron";
+import EdgeXSource from "./Source/EdgeX";
 
 const initialNodes: any[] = [];
 
@@ -29,7 +31,9 @@ function Flow() {
   const [type] = useDnD();
 
   const nodeTypes = {
-    mqtt: MqttSource,
+    mqttSource: MqttSource,
+    neuronSource: Neuron,
+    edgexSource: EdgeXSource,
   };
 
   const onConnect = useCallback(

@@ -32,7 +32,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -42,7 +41,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { Check, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -53,7 +52,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-function MqttSource({ id, data }: NodeProps<Node<{ [x: string]: string }>>) {
+function EdgeXSource({ id, data }: NodeProps<Node<{ [x: string]: string }>>) {
   const { updateNodeData } = useReactFlow();
 
   const formSchema = z.object({
@@ -100,29 +99,32 @@ function MqttSource({ id, data }: NodeProps<Node<{ [x: string]: string }>>) {
   }, [form, id, updateNodeData]);
 
   return (
-    <Card className="w-80">
-      <CardHeader>
-        <CardTitle>MQTT</CardTitle>
-        <CardDescription>
-          eKuiper 为 MQTT 源流提供了内置支持，流可以订阅来自
-          MQTT代理的消息并输入 eKuiper 处理管道。
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="p-0">
-        <div className="absolute top-4 right-4">
+    <div className="rounded-xl border bg-card text-card-foreground shadow w-60">
+      <div className="flex flex-col space-y-1 p-2">
+        <div className="font-semibold tracking-tight text-xs">EdgeX</div>
+        <div className="text-muted-foreground text-[0.5rem]/[0.7rem]">
+          eKuiper内置支持EdgeX数据源,支持订阅来自于EdgeX消息总线的数据,并将数据放入eKuiper数据处理流水线中。用户可直接通过EdgeX数据源消费EdgeX中的事件,无需任何手动模式定义。
+        </div>
+      </div>
+      <div className="p-0">
+        <div className="absolute top-3 right-3">
           <Dialog>
             <DialogTrigger asChild>
-              <Settings />
+              <Settings size={15} />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[40vw] md:max-w-[40vw]">
               <DialogHeader>
-                <DialogTitle>编辑MQTT配置</DialogTitle>
+                <DialogTitle>编辑EdgeX配置</DialogTitle>
                 <DialogDescription>
-                  eKuiper 为 MQTT 源流提供了内置支持，流可以订阅来自
-                  MQTT代理的消息并输入 eKuiper 处理管道。
+                  eKuiper 内置支持 EdgeX 数据源，支持订阅来自于 EdgeX
+                  消息总线的数据，并将数据放入 eKuiper
+                  数据处理流水线中。用户可直接通过 EdgeX 数据源消费 EdgeX
+                  中的事件，无需任何手动模式定义。 在 eKuiper 中，EdgeX
+                  连接器可以作为源连接器（从 EdgeX 获取数据）或 Sink
+                  连接器（将数据发布到 EdgeX），本节重点介绍 EdgeX 源连接器。
                 </DialogDescription>
               </DialogHeader>
-              <div className="overflow-y-auto max-h-96">
+              <div className="overflow-y-auto max-h-96 px-1">
                 <Form {...form}>
                   <form className="space-y-1">
                     <FormField
@@ -315,9 +317,6 @@ function MqttSource({ id, data }: NodeProps<Node<{ [x: string]: string }>>) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>保留最后一条消息和其Qos</FormLabel>
-                          {/* <FormDescription>
-                                      Receive emails about your account security.
-                                    </FormDescription> */}
                           <FormControl>
                             <Switch
                               checked={field.value}
@@ -381,12 +380,7 @@ function MqttSource({ id, data }: NodeProps<Node<{ [x: string]: string }>>) {
             </DialogContent>
           </Dialog>
         </div>
-      </CardContent>
-      {/* <CardFooter>
-        <Button className="w-full">
-          <Check /> 检查并保存
-        </Button>
-      </CardFooter> */}
+      </div>
       <ContextMenu>
         <ContextMenuTrigger>
           <Handle type="source" position={Position.Right} />
@@ -398,8 +392,8 @@ function MqttSource({ id, data }: NodeProps<Node<{ [x: string]: string }>>) {
           <ContextMenuItem>Subscription</ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
-    </Card>
+    </div>
   );
 }
 
-export default memo(MqttSource);
+export default memo(EdgeXSource);
